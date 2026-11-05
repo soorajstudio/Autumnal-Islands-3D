@@ -484,77 +484,43 @@ h1, h2, h3, h4 {
   100% { transform: scale(1.8); opacity: 0; }
 }
 
-/* Bottom Controls Bar */
-.hud-controls-dock {
+/* Bottom HUD Unified Stack - cleanly separates camera & controls rows */
+.bottom-hud-wrapper {
   position: absolute;
-  bottom: 2rem;
+  bottom: 1.6rem;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 0.75rem;
-  background: rgba(253, 250, 244, 0.9);
-  border: 1px solid var(--c-border);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  padding: 0.6rem 1rem;
-  border-radius: var(--radius-full);
-  box-shadow: var(--shadow-float);
-  z-index: 30;
-  max-width: 90vw;
-  flex-wrap: wrap;
-  justify-content: center;
+  gap: 0.65rem;
+  z-index: 35;
+  width: auto;
+  max-width: 95vw;
+  pointer-events: none;
 }
 
-.control-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  background: transparent;
-  border: 1px solid transparent;
-  padding: 0.45rem 0.85rem;
-  border-radius: var(--radius-full);
-  font-size: 0.82rem;
-  font-weight: 500;
-  color: #55483e;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.control-btn:hover {
-  background: var(--c-washi-warm);
-  color: var(--c-sumi);
-}
-
-.control-btn.active {
-  background: var(--c-sumi);
-  color: #fff;
-  border-color: var(--c-sumi);
-}
-
-.control-divider {
-  width: 1px;
-  height: 20px;
-  background: var(--c-border);
-}
-
-/* Quick Camera Nav Pills */
+/* Row 1: Quick Camera Nav Pills */
 .camera-dock {
-  position: absolute;
-  bottom: 5.6rem;
-  left: 50%;
-  transform: translateX(-50%);
+  position: relative;
   display: flex;
   align-items: center;
   gap: 0.45rem;
-  background: rgba(253, 250, 244, 0.78);
+  background: rgba(253, 250, 244, 0.88);
   border: 1px solid var(--c-border);
-  backdrop-filter: blur(12px);
-  padding: 0.4rem 0.65rem;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  padding: 0.4rem 0.75rem;
   border-radius: var(--radius-full);
-  z-index: 28;
-  max-width: 92vw;
+  box-shadow: 0 6px 20px rgba(45, 30, 20, 0.1);
+  max-width: 94vw;
   overflow-x: auto;
+  pointer-events: auto;
+  scrollbar-width: none;
+}
+
+.camera-dock::-webkit-scrollbar {
+  display: none;
 }
 
 .cam-btn {
@@ -578,6 +544,65 @@ h1, h2, h3, h4 {
 .cam-btn.active {
   background: var(--c-vermilion);
   color: #fff;
+}
+
+/* Row 2: Bottom Scene Controls Bar */
+.hud-controls-dock {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: rgba(253, 250, 244, 0.92);
+  border: 1px solid var(--c-border);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 0.5rem 0.95rem;
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-float);
+  max-width: 94vw;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  justify-content: center;
+  pointer-events: auto;
+  scrollbar-width: none;
+}
+
+.hud-controls-dock::-webkit-scrollbar {
+  display: none;
+}
+
+.control-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: transparent;
+  border: 1px solid transparent;
+  padding: 0.42rem 0.8rem;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #55483e;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.control-btn:hover {
+  background: var(--c-washi-warm);
+  color: var(--c-sumi);
+}
+
+.control-btn.active {
+  background: var(--c-sumi);
+  color: #fff;
+  border-color: var(--c-sumi);
+}
+
+.control-divider {
+  width: 1px;
+  height: 18px;
+  background: var(--c-border);
+  flex-shrink: 0;
 }
 
 /* Slide-out Landmark Drawer */
