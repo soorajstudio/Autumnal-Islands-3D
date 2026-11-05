@@ -98,44 +98,47 @@
       </div>
     </div>
 
-    <!-- Quick Camera Navigation Dock -->
-    <div class="camera-dock">
-      <button class="cam-btn active" data-cam="reset">🌟 Overview</button>
-      <button class="cam-btn" data-cam="sacred-tree">🍁 Sacred Maple</button>
-      <button class="cam-btn" data-cam="tea-sanctuary">🍵 Matcha & Wagashi</button>
-      <button class="cam-btn" data-cam="vermilion-bridge">⛩️ Vermilion Bridge</button>
-      <button class="cam-btn" data-cam="moss-monument">🪨 Moss Monument</button>
-      <button class="cam-btn" data-cam="floating-isles">🏝️ Floating Isles</button>
-      <button class="cam-btn" data-cam="shoji-lantern">🏮 Shoji Lantern</button>
-    </div>
+    <!-- Bottom Unified HUD Wrapper (stacked rows, zero overlap) -->
+    <div class="bottom-hud-wrapper">
+      <!-- Row 1: Quick Camera Navigation Dock -->
+      <div class="camera-dock">
+        <button class="cam-btn active" data-cam="reset">🌟 Overview</button>
+        <button class="cam-btn" data-cam="sacred-tree">🍁 Sacred Maple</button>
+        <button class="cam-btn" data-cam="tea-sanctuary">🍵 Matcha & Wagashi</button>
+        <button class="cam-btn" data-cam="vermilion-bridge">⛩️ Vermilion Bridge</button>
+        <button class="cam-btn" data-cam="moss-monument">🪨 Moss Monument</button>
+        <button class="cam-btn" data-cam="floating-isles">🏝️ Floating Isles</button>
+        <button class="cam-btn" data-cam="shoji-lantern">🏮 Shoji Lantern</button>
+      </div>
 
-    <!-- Bottom Controls Dock -->
-    <div class="hud-controls-dock">
-      <!-- Time of Day Switcher -->
-      <button class="control-btn time-btn active" data-time="golden" title="Golden Hour lighting">🌅 Golden Hour</button>
-      <button class="control-btn time-btn" data-time="sunset" title="Sunset Twilight lighting">🌇 Sunset</button>
-      <button class="control-btn time-btn" data-time="night" title="Moonlit Night lighting">🌌 Night</button>
-      <button class="control-btn time-btn" data-time="dawn" title="Misty Dawn lighting">🌫️ Dawn</button>
+      <!-- Row 2: Scene Controls Dock -->
+      <div class="hud-controls-dock">
+        <!-- Time of Day Switcher -->
+        <button class="control-btn time-btn active" data-time="golden" title="Golden Hour lighting">🌅 Golden Hour</button>
+        <button class="control-btn time-btn" data-time="sunset" title="Sunset Twilight lighting">🌇 Sunset</button>
+        <button class="control-btn time-btn" data-time="night" title="Moonlit Night lighting">🌌 Night</button>
+        <button class="control-btn time-btn" data-time="dawn" title="Misty Dawn lighting">🌫️ Dawn</button>
 
-      <div class="control-divider"></div>
+        <div class="control-divider"></div>
 
-      <!-- Auto Rotate Toggle -->
-      <button id="btn-autorotate" class="control-btn active" title="Toggle automatic scene rotation">
-        <span>🔄</span>
-        <span>Auto-Orbit</span>
-      </button>
+        <!-- Auto Rotate Toggle -->
+        <button id="btn-autorotate" class="control-btn active" title="Toggle automatic scene rotation">
+          <span>🔄</span>
+          <span>Auto-Orbit</span>
+        </button>
 
-      <!-- Snapshot Capture -->
-      <button id="btn-snapshot" class="control-btn" title="Save high-resolution snapshot">
-        <span>📸</span>
-        <span>Snapshot</span>
-      </button>
+        <!-- Snapshot Capture -->
+        <button id="btn-snapshot" class="control-btn" title="Save high-resolution snapshot">
+          <span>📸</span>
+          <span>Snapshot</span>
+        </button>
 
-      <!-- Visual Settings -->
-      <button id="btn-settings" class="control-btn" title="Adjust visual parameters">
-        <span>⚙️</span>
-        <span>Settings</span>
-      </button>
+        <!-- Visual Settings -->
+        <button id="btn-settings" class="control-btn" title="Adjust visual parameters">
+          <span>⚙️</span>
+          <span>Settings</span>
+        </button>
+      </div>
     </div>
   </section>
 
