@@ -333,9 +333,10 @@ export class AutumnScene {
   loadModel() {
     const loader = new GLTFLoader();
     const loadingElem = document.getElementById('scene-loader');
+    const modelUrl = new URL('autumnal_islands.glb', window.location.href).href;
 
     loader.load(
-      '/autumnal_islands.glb',
+      modelUrl,
       (gltf) => {
         this.modelRoot = gltf.scene;
         this.applyCustomMaterials(this.modelRoot);
