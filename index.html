@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Autumnal Islands (秋の島) — 3D Zen Sanctuary & Archipelago</title>
+  <meta name="description" content="Experience the Autumnal Islands in real-time 3D. Explore the ancient sacred maple, tea pavilion, vermilion arch bridge, and floating sky isles with ambient Zen soundscapes." />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍁</text></svg>" />
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <a href="#" class="brand">
+      <div class="brand-stamp">秋</div>
+      <div>
+        <div class="brand-title">Autumnal Islands</div>
+        <div class="brand-subtitle">Aki no Shima • 3D Zen Retreat</div>
+      </div>
+    </a>
+
+    <nav>
+      <ul class="nav-links">
+        <li><a href="#experience" class="nav-link">3D Canvas</a></li>
+        <li><a href="#landmarks" class="nav-link">Landmarks</a></li>
+        <li><a href="#tea-ceremony" class="nav-link">Tea Pavilion</a></li>
+        <li><a href="#botanical" class="nav-link">Flora & Stones</a></li>
+        <li><a href="#wishtree" class="nav-link">Wish Tree</a></li>
+        <li><a href="#specifications" class="nav-link">Tech Specs</a></li>
+      </ul>
+    </nav>
+
+    <div class="nav-actions">
+      <!-- Audio Pill -->
+      <button id="audio-pill" class="audio-pill" title="Toggle procedural autumn wind & Zen chimes">
+        <span class="audio-indicator">
+          <span class="audio-bar"></span>
+          <span class="audio-bar"></span>
+          <span class="audio-bar"></span>
+        </span>
+        <span class="audio-text">Ambient Audio</span>
+      </button>
+
+      <a href="#experience" class="btn-cta">
+        <span>Explore in 3D</span>
+        <span>→</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- 3D Hero Viewport -->
+  <section id="experience" class="hero-3d-wrapper">
+    <!-- WebGL Canvas Container -->
+    <div id="canvas-container"></div>
+
+    <!-- Projected 3D Hotspot Pins Layer -->
+    <div id="hotspots-layer"></div>
+
+    <!-- Scene Loading Overlay -->
+    <div id="scene-loader">
+      <div class="loader-emblem">紅葉</div>
+      <h2 class="loader-title">Awakening Autumnal Islands</h2>
+      <p class="loader-sub">Synthesizing 3D geometry, shaders & levitation physics...</p>
+      <div class="loader-bar-bg">
+        <div id="loader-progress" class="loader-bar-fill"></div>
+      </div>
+      <div id="loader-percent" class="loader-status">0%</div>
+    </div>
+
+    <!-- Floating HUD Overlay -->
+    <div class="hud-header">
+      <div class="hud-badge">
+        <span>🍁</span>
+        <span>Interactive 3D Sanctuary</span>
+      </div>
+      <h1 class="hud-title">Aki no Shima</h1>
+      <p class="hud-subtitle">A floating autumn archipelago. Drag to rotate, scroll to zoom, or click glowing pins to inspect sacred landmarks.</p>
+    </div>
+
+    <!-- Telemetry HUD -->
+    <div class="hud-telemetry">
+      <div class="telemetry-row">
+        <span>TIME PRESET</span>
+        <span id="telemetry-time" class="telemetry-val">GOLDEN HOUR</span>
+      </div>
+      <div class="telemetry-row">
+        <span>ALTITUDE</span>
+        <span class="telemetry-val">1,240m Skybound</span>
+      </div>
+      <div class="telemetry-row">
+        <span>WIND VELOCITY</span>
+        <span class="telemetry-val">3.4 m/s SSE</span>
+      </div>
+      <div class="telemetry-row">
+        <span>CAMERA COORDS</span>
+        <span id="telemetry-cam" class="telemetry-val">12.0, 6.0, 16.0</span>
+      </div>
+    </div>
+
+    <!-- Quick Camera Navigation Dock -->
+    <div class="camera-dock">
+      <button class="cam-btn active" data-cam="reset">🌟 Overview</button>
+      <button class="cam-btn" data-cam="sacred-tree">🍁 Sacred Maple</button>
+      <button class="cam-btn" data-cam="tea-sanctuary">🍵 Matcha & Wagashi</button>
+      <button class="cam-btn" data-cam="vermilion-bridge">⛩️ Vermilion Bridge</button>
+      <button class="cam-btn" data-cam="moss-monument">🪨 Moss Monument</button>
+      <button class="cam-btn" data-cam="floating-isles">🏝️ Floating Isles</button>
+      <button class="cam-btn" data-cam="shoji-lantern">🏮 Shoji Lantern</button>
+    </div>
+
+    <!-- Bottom Controls Dock -->
+    <div class="hud-controls-dock">
+      <!-- Time of Day Switcher -->
+      <button class="control-btn time-btn active" data-time="golden" title="Golden Hour lighting">🌅 Golden Hour</button>
+      <button class="control-btn time-btn" data-time="sunset" title="Sunset Twilight lighting">🌇 Sunset</button>
+      <button class="control-btn time-btn" data-time="night" title="Moonlit Night lighting">🌌 Night</button>
+      <button class="control-btn time-btn" data-time="dawn" title="Misty Dawn lighting">🌫️ Dawn</button>
+
+      <div class="control-divider"></div>
+
+      <!-- Auto Rotate Toggle -->
+      <button id="btn-autorotate" class="control-btn" title="Toggle automatic scene rotation">
+        <span>🔄</span>
+        <span>Auto-Orbit</span>
+      </button>
+
+      <!-- Snapshot Capture -->
+      <button id="btn-snapshot" class="control-btn" title="Save high-resolution snapshot">
+        <span>📸</span>
+        <span>Snapshot</span>
+      </button>
+
+      <!-- Visual Settings -->
+      <button id="btn-settings" class="control-btn" title="Adjust visual parameters">
+        <span>⚙️</span>
+        <span>Settings</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- Slide-out Landmark Drawer -->
+  <aside id="landmark-drawer" class="landmark-drawer">
+    <div class="drawer-header">
+      <div>
+        <div id="drawer-kanji" class="drawer-kanji">神木</div>
+        <h2 id="drawer-title" class="drawer-title">The Sacred Maple</h2>
+        <div id="drawer-jp-sub" class="drawer-sub" style="font-family: var(--font-kanji); color: #8a7a6c; font-size: 0.85rem;">黄金と紅蓮の御神木</div>
+      </div>
+      <button id="drawer-close" class="drawer-close" title="Close drawer">✕</button>
+    </div>
+
+    <div class="drawer-body">
+      <div class="haiku-box">
+        <p id="drawer-haiku-jp" class="haiku-jp">秋風や 白木の枝に 紅葉散る</p>
+        <p id="drawer-haiku-en" class="haiku-en">Autumn breeze blowing — / Upon white branches softly / Red leaves flutter down.</p>
+      </div>
+
+      <p id="drawer-desc" class="drawer-desc">
+        The ancient centerpiece of Aki no Shima. Its multi-tiered crown of dodecahedron foliage clusters burns with vermilion, amber, and golden maple leaves.
+      </p>
+
+      <div id="drawer-specs" class="drawer-specs">
+        <!-- Injected via main.js -->
+      </div>
+    </div>
+
+    <div class="drawer-footer">
+      <button id="drawer-btn-fly" class="btn-cta" style="flex: 1; justify-content: center;">
+        <span>Re-focus Camera</span>
+        <span>🎯</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Settings Drawer -->
+  <aside id="settings-drawer" class="settings-drawer">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.8rem;">
+      <h3 style="font-size: 1.25rem;">Visual Settings</h3>
+      <button id="settings-close" class="drawer-close">✕</button>
+    </div>
+
+    <div class="setting-group">
+      <div class="setting-title">Falling Maple Leaves</div>
+      <input type="range" id="slider-leaves" class="setting-slider" min="0" max="1" step="0.05" value="0.45" />
+      <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #88786a; margin-top: 0.3rem;">
+        <span>Sparse Drift (6 leaves)</span>
+        <span>Gentle Flurry (32 leaves)</span>
+      </div>
+    </div>
+
+    <div class="setting-group">
+      <div class="setting-title">Shading & Aesthetics</div>
+      <div class="render-mode-grid">
+        <button class="render-mode-btn active" data-mode="vibrant">🍁 Vibrant Autumn</button>
+        <button class="render-mode-btn" data-mode="clay">⚪ Zen Sand Clay</button>
+        <button class="render-mode-btn" data-mode="cyber">🌙 Midnight Slate</button>
+        <button class="render-mode-btn" data-mode="wireframe">📐 Wireframe</button>
+      </div>
+    </div>
+
+    <div class="setting-group" style="background: #fbf5ea; padding: 1rem; border-radius: 8px; font-size: 0.82rem; color: #6e6155;">
+      <strong>Tip:</strong> You can right-click and drag anywhere on the 3D canvas to pan the camera, or scroll your wheel to zoom closely into the tea set and bridge details.
+    </div>
+  </aside>
+
+  <!-- Narrative Content Sections -->
+
+  <!-- Section 1: Island Lore -->
+  <section id="landmarks" class="section-container">
+    <div class="section-badge">秋の景勝地 • SIX SACRED REALMS</div>
+    <h2 class="section-heading">Landmarks of Aki no Shima</h2>
+    <p class="section-lead">
+      Each corner of the floating sanctuary was sculpted by mountain monks and celestial currents. Select any sanctuary landmark to fly the 3D camera directly to its coordinates.
+    </p>
+
+    <div class="landmark-grid">
+      <!-- Card 1 -->
+      <article class="landmark-card">
+        <div class="card-top">
+          <div class="card-stamp">木</div>
+          <span class="card-coords">X: 0.34 • Z: 4.38</span>
+        </div>
+        <h3 class="card-title">The Sacred Maple (Shinboku)</h3>
+        <p class="card-desc">
+          A multi-tiered Japanese maple adorned in vermilion, amber, and golden dodecahedron foliage. Its roots channel celestial gravity to keep the sanctuary levitating.
+        </p>
+        <button class="btn-card-fly btn-gallery-fly" data-spot="sacred-tree">
+          <span>Fly to Sacred Tree</span>
+          <span>↗</span>
+        </button>
+      </article>
+
+      <!-- Card 2 -->
+      <article class="landmark-card">
+        <div class="card-top">
+          <div class="card-stamp">茶</div>
+          <span class="card-coords">X: 4.14 • Z: 3.70</span>
+        </div>
+        <h3 class="card-title">Matcha & Wagashi Tea Sanctuary</h3>
+        <p class="card-desc">
+          Resting on a handcrafted hinoki garden bench, a stoneware chawan holds frothy Uji ceremonial matcha accompanied by layered chestnut wagashi confections.
+        </p>
+        <button class="btn-card-fly btn-gallery-fly" data-spot="tea-sanctuary">
+          <span>Fly to Tea Bench</span>
+          <span>↗</span>
+        </button>
+      </article>
+
+      <!-- Card 3 -->
+      <article class="landmark-card">
+        <div class="card-top">
+          <div class="card-stamp">橋</div>
+          <span class="card-coords">X: 1.83 • Z: -1.33</span>
+        </div>
+        <h3 class="card-title">Vermilion Arch Bridge (Taiko-bashi)</h3>
+        <p class="card-desc">
+          Lacquered in sacred cinnabar red, this arched footbridge bridges the rift between the tea pavilion and the outer moss slopes above the cloud canopy.
+        </p>
+        <button class="btn-card-fly btn-gallery-fly" data-spot="vermilion-bridge">
+          <span>Fly to Bridge</span>
+          <span>↗</span>
+        </button>
+      </article>
+
+      <!-- Card 4 -->
+      <article class="landmark-card">
+        <div class="card-top">
+          <div class="card-stamp">碑</div>
+          <span class="card-coords">X: -3.22 • Z: 4.05</span>
+        </div>
+        <h3 class="card-title">Ancient Shinto Monument & Steps</h3>
+        <p class="card-desc">
+          Fourteen pentagon stepping stones wind upward toward a weather-carved granite stone monument carpeted in emerald Racomitrium mountain moss.
+        </p>
+        <button class="btn-card-fly btn-gallery-fly" data-spot="moss-monument">
+          <span>Fly to Monument</span>
+          <span>↗</span>
+        </button>
+      </article>
+
+      <!-- Card 5 -->
+      <article class="landmark-card">
+        <div class="card-top">
+          <div class="card-stamp">島</div>
+          <span class="card-coords">X: -4.80 • Z: -4.80</span>
+        </div>
+        <h3 class="card-title">Levitating Sky Crags</h3>
+        <p class="card-desc">
+          Six satellite isles float weightlessly around the main sanctuary. Watch them gently rise and fall on harmonic air currents in real time.
+        </p>
+        <button class="btn-card-fly btn-gallery-fly" data-spot="floating-isles">
+          <span>Fly to Floating Isles</span>
+          <span>↗</span>
+        </button>
+      </article>
+
+      <!-- Card 6 -->
+      <article class="landmark-card">
+        <div class="card-top">
+          <div class="card-stamp">灯</div>
+          <span class="card-coords">X: 0.27 • Z: -4.10</span>
+        </div>
+        <h3 class="card-title">Twilight Shoji Lantern</h3>
+        <p class="card-desc">
+          Charred cedar lattice houses warm translucent washi paper that flickers gently with the mountain breeze, casting amber embers into the dusk.
+        </p>
+        <button class="btn-card-fly btn-gallery-fly" data-spot="shoji-lantern">
+          <span>Fly to Lantern</span>
+          <span>↗</span>
+        </button>
+      </article>
+    </div>
+  </section>
+
+  <!-- Section 2: Tea Ceremony Spotlight -->
+  <section id="tea-ceremony" class="tea-section">
+    <div class="section-container">
+      <div class="tea-showcase">
+        <div>
+          <div class="tea-badge">野点 • AUTUMN TEA RITUAL</div>
+          <h2 class="section-heading" style="font-size: 2.3rem;">The Art of Solitary Tea in Autumn</h2>
+          <p style="color: #6a5c50; line-height: 1.8; margin-bottom: 1.5rem;">
+            In Japanese aesthetics, <em>nodate</em> (野点) is the practice of conducting a tea ceremony out in nature. Here on the wooden bench, facing the falling maple leaves, every element modeled in 3D reflects the spirit of <em>ichi-go ichi-e</em> ("one time, one meeting").
+          </p>
+
+          <ul class="tea-items-list">
+            <li class="tea-item">
+              <div class="tea-icon">🍵</div>
+              <div>
+                <div class="tea-item-title">Matcha in Stoneware Chawan</div>
+                <div class="tea-item-desc">First-harvest shade-grown green tea leaves stone-ground into vibrant jade powder and whisked with mountain spring water.</div>
+              </div>
+            </li>
+
+            <li class="tea-item">
+              <div class="tea-icon">🌰</div>
+              <div>
+                <div class="tea-item-title">Autumn Chestnut Wagashi</div>
+                <div class="tea-item-desc">A delicate layered confection made of sweet chestnut puree (kuri kinton) and adzuki red bean, balancing the slight astringency of the matcha.</div>
+              </div>
+            </li>
+
+            <li class="tea-item">
+              <div class="tea-icon">🪵</div>
+              <div>
+                <div class="tea-item-title">Hinoki & Forged Iron Bench</div>
+                <div class="tea-item-desc">Warm honey-toned Japanese cypress wood planks joined with dark forged iron rivets, positioned for prime foliage contemplation.</div>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="tea-card-hero">
+          <div style="font-family: var(--font-kanji); font-size: 3rem; color: var(--c-matcha); margin-bottom: 0.5rem;">一期一会</div>
+          <h3 style="font-size: 1.5rem; margin-bottom: 0.8rem;">The Zen of Aki no Shima</h3>
+          <p style="color: #63574c; line-height: 1.7; font-size: 0.94rem; margin-bottom: 1.6rem;">
+            "Drink your tea slowly and reverently, as if it is the axis on which the whole earth revolves — slowly, evenly, without rushing toward the future."
+          </p>
+          <div style="border-top: 1px solid var(--c-border); padding-top: 1.2rem; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 0.82rem; font-weight: 600; color: #857465;">3D Model Node: <code>Tea Matcha [0]</code> & <code>Cake [3-10]</code></span>
+            <button class="btn-card-fly btn-gallery-fly" data-spot="tea-sanctuary" style="padding: 0.4rem 0.8rem; font-size: 0.78rem;">Inspect in 3D</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 3: Botanical & Geological Guide -->
+  <section id="botanical" class="section-container">
+    <div class="section-badge">植生と地質 • BOTANICAL & GEOLOGY</div>
+    <h2 class="section-heading">Ecology of the Floating Realm</h2>
+    <p class="section-lead">
+      The flora and stone formations represented in the 3D model are drawn from the alpine ecosystems of the Japanese Alps and mythical celestial lore.
+    </p>
+
+    <div class="flora-grid">
+      <div class="flora-card">
+        <div class="flora-latin">Acer palmatum var. matsudae</div>
+        <h4 class="flora-name">Japanese Mountain Maple</h4>
+        <p class="flora-desc">
+          Characterized by its deep scarlet and orange palmate leaves. In the 3D scene, the foliage is clustered into stylized dodecahedron groupings that catch sunlight from multiple angles.
+        </p>
+      </div>
+
+      <div class="flora-card">
+        <div class="flora-latin">Cryptomeria japonica</div>
+        <h4 class="flora-name">Ancient Sugi Cedar</h4>
+        <p class="flora-desc">
+          Dense, fragrant reddish-brown timber forming the structural trunks and bridge beams. Cedar wood naturally resists mountain moisture and rot.
+        </p>
+      </div>
+
+      <div class="flora-card">
+        <div class="flora-latin">Racomitrium japonicum</div>
+        <h4 class="flora-name">Sun Moss & Velvet Lichen</h4>
+        <p class="flora-desc">
+          Hardy alpine moss that carpets the stone steps, bridge approaches, and the base of the sacred monument, turning golden olive in autumn.
+        </p>
+      </div>
+
+      <div class="flora-card">
+        <div class="flora-latin">Basalt & Gravitational Ore</div>
+        <h4 class="flora-name">Celestial Sky Basalt</h4>
+        <p class="flora-desc">
+          Dark stratified volcanic bedrock containing natural magnetic anomalies that react with atmospheric slipstreams, allowing the satellite islands to levitate indefinitely.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: Maple Wish Tree -->
+  <section id="wishtree" class="section-container">
+    <div class="wish-wrapper">
+      <div class="section-badge" style="background: rgba(232, 134, 34, 0.12); color: var(--c-amber);">絵馬 • THE WISH TREE</div>
+      <h2 class="section-heading" style="font-size: 2.2rem;">Leave an Autumn Reflection</h2>
+      <p style="color: #6e5f52; margin-bottom: 2rem; max-width: 600px;">
+        Tie a thought to the digital autumn boughs. Each message flutters on a golden leaf across the sanctuary sky.
+      </p>
+
+      <form id="wish-form" class="wish-form">
+        <input 
+          type="text" 
+          id="wish-input" 
+          class="wish-input" 
+          placeholder="Write your seasonal wish or quiet thought..." 
+          maxlength="120"
+          required
+        />
+        <button type="submit" class="btn-cta" style="padding: 0.85rem 1.8rem;">
+          <span>Release Leaf</span>
+          <span>🍁</span>
+        </button>
+      </form>
+
+      <div id="wish-grid" class="wish-grid">
+        <!-- Rendered by main.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 5: Technical Specifications -->
+  <section id="specifications" class="section-container">
+    <div class="section-badge">仕様 • TECHNICAL SPECIFICATIONS</div>
+    <h2 class="section-heading">3D Model & Architecture Specs</h2>
+    <p class="section-lead">
+      Direct breakdown of the underlying 3D asset <code>autumnal_islands.glb</code> and the modern rendering pipeline.
+    </p>
+
+    <table class="tech-table">
+      <thead>
+        <tr>
+          <th>Specification Metric</th>
+          <th>Asset Value</th>
+          <th>Implementation Note</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>3D Model Source</strong></td>
+          <td><code>autumnal_islands.glb</code> (2.65 MB)</td>
+          <td>Loaded dynamically via Three.js <code>GLTFLoader</code> with fallback support for <code>.gltf</code></td>
+        </tr>
+        <tr>
+          <td><strong>Scene Node Count</strong></td>
+          <td>185 Nodes</td>
+          <td>Semantic hierarchy (Bench, Tea Matcha, Cake, Main Tree, Bridge, Monument, Floating 1..6)</td>
+        </tr>
+        <tr>
+          <td><strong>Mesh Primitives</strong></td>
+          <td>140 Meshes</td>
+          <td>Optimized WebGL buffer views with PBR Standard Materials</td>
+        </tr>
+        <tr>
+          <td><strong>Camera System</strong></td>
+          <td>Perspective (45° FOV) + OrbitControls</td>
+          <td>Smooth cubic interpolation for hotspot flights and cinematic close-ups</td>
+        </tr>
+        <tr>
+          <td><strong>Audio System</strong></td>
+          <td>Web Audio API Synth</td>
+          <td>100% procedural wind synthesis and harmonic pentatonic wind chimes; zero audio downloads</td>
+        </tr>
+        <tr>
+          <td><strong>Interactive Hotspots</strong></td>
+          <td>6 Key Coordinates</td>
+          <td>Projected in real time from 3D space to HTML5 viewport coordinate space</td>
+        </tr>
+        <tr>
+          <td><strong>Particle Engine</strong></td>
+          <td>InstancedMesh (Momiji Maple Leaves)</td>
+          <td>Realistic 5-lobed Japanese maple leaf shapes with curved curvature, aerodynamically drifting with gentle wind sway</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-stamp">秋</div>
+        <div>
+          <div style="font-family: var(--font-serif); font-weight: 700; color: #fff; letter-spacing: 0.08em;">AUTUMNAL ISLANDS</div>
+          <div style="font-size: 0.78rem; color: #9c8e82;">Aki no Shima • Interactive 3D Web Experience</div>
+        </div>
+      </div>
+
+      <div class="footer-copy">
+        Crafted with Three.js, WebGL2 & Web Audio API &copy; 2026. Inspired by the Autumnal Islands 3D Model.
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
