@@ -153,6 +153,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  // Auto-Rotate button
+  const autoRotateBtn = document.getElementById('btn-autorotate');
+  if (autoRotateBtn) {
+    autoRotateBtn.classList.add('active'); // On by default
+    autoRotateBtn.addEventListener('click', () => {
+      scene.controls.autoRotate = !scene.controls.autoRotate;
+      autoRotateBtn.classList.toggle('active', scene.controls.autoRotate);
+    });
+  }
+
   // Landmark Drawer
   const drawer = document.getElementById('landmark-drawer');
   const drawerClose = document.getElementById('drawer-close');
@@ -187,13 +197,45 @@ document.addEventListener('DOMContentLoaded', () => {
     `).join('');
 
     drawer.classList.add('open');
+
+    // Pause auto-orbit while inspecting the landmark details
+    scene.controls.autoRotate = false;
+    if (autoRotateBtn) autoRotateBtn.classList.remove('active');
+
+    // Update active state in camera dock
+    camBtns.forEach(b => {
+      b.classList.toggle('active', b.dataset.cam === id);
+    });
   }
 
   function closeLandmarkDrawer() {
+    if (!drawer.classList.contains('open')) return;
     drawer.classList.remove('open');
+    currentDrawerId = null;
+
+    // Zoom back out to original overview size
+    scene.resetCamera();
+
+    // Resume auto-orbit
+    scene.controls.autoRotate = true;
+    if (autoRotateBtn) autoRotateBtn.classList.add('active');
+
+    // Reset camera dock to Overview
+    camBtns.forEach(b => {
+      b.classList.toggle('active', b.dataset.cam === 'reset');
+    });
+
+    soundEngine.playChime(523.25);
   }
 
   if (drawerClose) drawerClose.addEventListener('click', closeLandmarkDrawer);
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && drawer.classList.contains('open')) {
+      closeLandmarkDrawer();
+    }
+  });
+
   if (drawerFlyBtn) {
     drawerFlyBtn.addEventListener('click', () => {
       if (currentDrawerId) {
@@ -238,14 +280,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Auto-Rotate button
-  const autoRotateBtn = document.getElementById('btn-autorotate');
-  if (autoRotateBtn) {
-    autoRotateBtn.addEventListener('click', () => {
-      scene.controls.autoRotate = !scene.controls.autoRotate;
-      autoRotateBtn.classList.toggle('active', scene.controls.autoRotate);
-    });
-  }
 
   // Snapshot capture button
   const snapshotBtn = document.getElementById('btn-snapshot');

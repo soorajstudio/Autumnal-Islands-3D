@@ -39,7 +39,7 @@ export class AutumnScene {
     this.controls.maxPolarAngle = Math.PI / 2 + 0.05; // don't go below ground
     this.controls.minDistance = 3;
     this.controls.maxDistance = 45;
-    this.controls.autoRotate = false;
+    this.controls.autoRotate = true;
     this.controls.autoRotateSpeed = 0.8;
 
     // State
